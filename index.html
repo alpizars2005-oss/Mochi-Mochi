@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mochi Mochi: menú web con carrito y pedidos rápidos." />
+    <title>Mochi Mochi | Antojitos bonitos</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header" id="inicio">
+      <nav class="navbar" aria-label="Navegación principal">
+        <a class="brand" href="#inicio" aria-label="Ir al inicio">
+          <span class="brand__mark">MM</span>
+          <span>
+            <strong>Mochi Mochi</strong>
+            <small>sweet bites & cozy food</small>
+          </span>
+        </a>
+
+        <button class="nav-toggle" type="button" aria-label="Abrir menú" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+
+        <div class="nav-links" data-nav-links>
+          <a href="#menu">Menú</a>
+          <a href="#experiencia">Experiencia</a>
+          <a href="#pedido">Pedido</a>
+          <button class="ghost-button" type="button" data-theme-toggle>Modo noche</button>
+        </div>
+      </nav>
+
+      <section class="hero section-shell">
+        <div class="hero__content reveal">
+          <p class="eyebrow">Hecho con calma, servido bonito</p>
+          <h1>Mochis, bebidas y antojitos para darte un gustito sin complicarte.</h1>
+          <p class="hero__copy">
+            Una versión web ligera, fluida y pensada para vender rápido: el cliente elige,
+            arma su pedido y lo manda por WhatsApp.
+          </p>
+          <div class="hero__actions">
+            <a class="primary-button" href="#menu">Ver menú</a>
+            <a class="secondary-button" href="#pedido">Armar pedido</a>
+          </div>
+          <div class="hero__stats" aria-label="Datos rápidos">
+            <span><strong>+12</strong> productos</span>
+            <span><strong>WhatsApp</strong> directo</span>
+            <span><strong>Mobile</strong> first</span>
+          </div>
+        </div>
+
+        <div class="hero-card reveal" aria-label="Producto destacado">
+          <img
+            src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=80"
+            alt="Postre suave con presentación cremosa"
+          />
+          <div class="floating-note">
+            <span>Favorito</span>
+            <strong>Mochi de fresa</strong>
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="section-shell intro-grid" id="experiencia">
+        <article class="intro-card reveal">
+          <span class="card-icon">01</span>
+          <h2>Bonito desde el primer vistazo</h2>
+          <p>
+            Colores suaves, tarjetas limpias y fotografías cálidas para que el negocio se
+            sienta artesanal, moderno y menos genérico.
+          </p>
+        </article>
+        <article class="intro-card reveal">
+          <span class="card-icon">02</span>
+          <h2>Pedido sin vueltas</h2>
+          <p>
+            El carrito calcula cantidades, subtotales y prepara el mensaje del pedido listo
+            para enviarse por WhatsApp.
+          </p>
+        </article>
+        <article class="intro-card reveal">
+          <span class="card-icon">03</span>
+          <h2>Fácil de editar</h2>
+          <p>
+            El menú vive en JavaScript para que puedas cambiar precios, fotos o nombres sin
+            tocar toda la página.
+          </p>
+        </article>
+      </section>
+
+      <section class="section-shell menu-section" id="menu">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Menú</p>
+          <h2>Elige tu antojo</h2>
+          <p>Filtra por categoría, agrega al carrito y ajusta cantidades cuando quieras.</p>
+        </div>
+
+        <div class="category-bar reveal" role="tablist" aria-label="Categorías del menú" data-categories></div>
+        <div class="menu-grid" data-menu-grid></div>
+      </section>
+
+      <section class="section-shell order-layout" id="pedido">
+        <div class="order-copy reveal">
+          <p class="eyebrow">Pedido</p>
+          <h2>Tu carrito</h2>
+          <p>
+            Revisa tu pedido y agrega una nota antes de enviarlo. La página no cobra ni guarda
+            datos: solo arma el mensaje para mandarlo directo.
+          </p>
+          <label class="note-field">
+            Nota para el pedido
+            <textarea data-order-note rows="4" placeholder="Ej. Sin tanta lechera, entregar después de las 6, pago por transferencia..."></textarea>
+          </label>
+        </div>
+
+        <aside class="cart-panel reveal" aria-label="Carrito de compra">
+          <div class="cart-panel__top">
+            <h2>Resumen</h2>
+            <button class="link-button" type="button" data-clear-cart>Vaciar</button>
+          </div>
+          <div class="cart-items" data-cart-items></div>
+          <div class="cart-total">
+            <span>Total estimado</span>
+            <strong data-cart-total>$0 MXN</strong>
+          </div>
+          <a class="primary-button primary-button--full" href="#" data-whatsapp-order target="_blank" rel="noopener">
+            Enviar por WhatsApp
+          </a>
+          <p class="mini-note">* Cambia el número del negocio en <code>app.js</code>.</p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="section-shell footer-grid">
+        <div>
+          <strong>Mochi Mochi</strong>
+          <p>Postres suaves, bebidas bonitas y pedidos sin drama.</p>
+        </div>
+        <div>
+          <span>Contacto</span>
+          <a href="#pedido">Ordenar ahora</a>
+          <a href="#menu">Ver menú</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
