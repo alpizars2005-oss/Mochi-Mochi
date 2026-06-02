@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Mochi Mochi: menú web con carrito y pedidos rápidos." />
-    <title>Mochi Mochi | Antojitos bonitos</title>
+    <meta name="description" content="Mochi Mochi: menú digital con carrito, pedidos por WhatsApp y panel de ventas exportable a Excel." />
+    <title>Mochi Mochi | Menú y ventas</title>
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="stylesheet" href="./styles.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script defer src="./app.js"></script>
   </head>
   <body>
     <header class="site-header" id="inicio">
@@ -15,7 +17,7 @@
           <span class="brand__mark">MM</span>
           <span>
             <strong>Mochi Mochi</strong>
-            <small>sweet bites & cozy food</small>
+            <small>antojos, postres y snacks</small>
           </span>
         </a>
 
@@ -25,39 +27,39 @@
 
         <div class="nav-links" data-nav-links>
           <a href="#menu">Menú</a>
-          <a href="#experiencia">Experiencia</a>
+          <a href="#ingredientes">Ingredientes</a>
           <a href="#pedido">Pedido</a>
+          <a href="#ventas">Ventas</a>
           <button class="ghost-button" type="button" data-theme-toggle>Modo noche</button>
         </div>
       </nav>
 
       <section class="hero section-shell">
         <div class="hero__content reveal">
-          <p class="eyebrow">Hecho con calma, servido bonito</p>
-          <h1>Mochis, bebidas y antojitos para darte un gustito sin complicarte.</h1>
+          <p class="eyebrow">Menú renovado</p>
+          <h1>Mochi Mochi ahora junta lo dulce, lo salado y lo coreanito en un solo menú.</h1>
           <p class="hero__copy">
-            Una versión web ligera, fluida y pensada para vender rápido: el cliente elige,
-            arma su pedido y lo manda por WhatsApp.
+            Una web rápida para mostrar productos, armar pedidos por WhatsApp y registrar ventas del día sin complicarse.
           </p>
           <div class="hero__actions">
             <a class="primary-button" href="#menu">Ver menú</a>
-            <a class="secondary-button" href="#pedido">Armar pedido</a>
+            <a class="secondary-button" href="#ventas">Abrir ventas</a>
           </div>
           <div class="hero__stats" aria-label="Datos rápidos">
-            <span><strong>+12</strong> productos</span>
+            <span><strong data-total-products>0</strong> productos</span>
+            <span><strong>Excel</strong> exportable</span>
             <span><strong>WhatsApp</strong> directo</span>
-            <span><strong>Mobile</strong> first</span>
           </div>
         </div>
 
         <div class="hero-card reveal" aria-label="Producto destacado">
           <img
-            src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=80"
-            alt="Postre suave con presentación cremosa"
+            src="https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=1000&q=80"
+            alt="Postres suaves con presentación bonita"
           />
           <div class="floating-note">
-            <span>Favorito</span>
-            <strong>Mochi de fresa</strong>
+            <span>Nuevo menú</span>
+            <strong>Mochis, banderillas, sushi y más</strong>
           </div>
         </div>
       </section>
@@ -67,27 +69,18 @@
       <section class="section-shell intro-grid" id="experiencia">
         <article class="intro-card reveal">
           <span class="card-icon">01</span>
-          <h2>Bonito desde el primer vistazo</h2>
-          <p>
-            Colores suaves, tarjetas limpias y fotografías cálidas para que el negocio se
-            sienta artesanal, moderno y menos genérico.
-          </p>
+          <h2>Menú editable</h2>
+          <p>Los productos, precios, sabores e ingredientes viven en <code>app.js</code> para cambiarlos rápido.</p>
         </article>
         <article class="intro-card reveal">
           <span class="card-icon">02</span>
-          <h2>Pedido sin vueltas</h2>
-          <p>
-            El carrito calcula cantidades, subtotales y prepara el mensaje del pedido listo
-            para enviarse por WhatsApp.
-          </p>
+          <h2>Pedido claro</h2>
+          <p>El carrito respeta variantes como sabor, cobertura o tipo de sushi antes de mandar el pedido.</p>
         </article>
         <article class="intro-card reveal">
           <span class="card-icon">03</span>
-          <h2>Fácil de editar</h2>
-          <p>
-            El menú vive en JavaScript para que puedas cambiar precios, fotos o nombres sin
-            tocar toda la página.
-          </p>
+          <h2>Ventas guardadas</h2>
+          <p>El panel registra ventas localmente y permite exportarlas para abrirlas en Excel.</p>
         </article>
       </section>
 
@@ -95,11 +88,27 @@
         <div class="section-heading reveal">
           <p class="eyebrow">Menú</p>
           <h2>Elige tu antojo</h2>
-          <p>Filtra por categoría, agrega al carrito y ajusta cantidades cuando quieras.</p>
+          <p>Filtra por categoría, revisa ingredientes, escoge sabores o variantes y agrega al carrito.</p>
+        </div>
+
+        <div class="toolbar reveal">
+          <label class="search-field">
+            Buscar producto
+            <input type="search" data-search placeholder="Ej. mochi, sushi, papas..." />
+          </label>
         </div>
 
         <div class="category-bar reveal" role="tablist" aria-label="Categorías del menú" data-categories></div>
         <div class="menu-grid" data-menu-grid></div>
+      </section>
+
+      <section class="section-shell ingredients-section" id="ingredientes">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Ingredientes</p>
+          <h2>Info separada por producto</h2>
+          <p>Esta parte sirve para revisar qué lleva cada producto sin mezclarlo con los sabores o variantes.</p>
+        </div>
+        <div class="ingredients-grid" data-ingredients-grid></div>
       </section>
 
       <section class="section-shell order-layout" id="pedido">
@@ -107,12 +116,11 @@
           <p class="eyebrow">Pedido</p>
           <h2>Tu carrito</h2>
           <p>
-            Revisa tu pedido y agrega una nota antes de enviarlo. La página no cobra ni guarda
-            datos: solo arma el mensaje para mandarlo directo.
+            Revisa el pedido, agrega una nota y mándalo por WhatsApp. También puedes registrar esta misma compra como venta.
           </p>
           <label class="note-field">
-            Nota para el pedido
-            <textarea data-order-note rows="4" placeholder="Ej. Sin tanta lechera, entregar después de las 6, pago por transferencia..."></textarea>
+            Nota para el pedido o venta
+            <textarea data-order-note rows="4" placeholder="Ej. Entregar después de las 6, pago por transferencia, sin tanta salsa..."></textarea>
           </label>
         </div>
 
@@ -126,11 +134,75 @@
             <span>Total estimado</span>
             <strong data-cart-total>$0 MXN</strong>
           </div>
-          <a class="primary-button primary-button--full" href="#" data-whatsapp-order target="_blank" rel="noopener">
-            Enviar por WhatsApp
-          </a>
-          <p class="mini-note">* Cambia el número del negocio en <code>app.js</code>.</p>
+          <div class="stack-actions">
+            <a class="primary-button primary-button--full" href="#" data-whatsapp-order target="_blank" rel="noopener">
+              Enviar por WhatsApp
+            </a>
+            <button class="secondary-button secondary-button--full" type="button" data-register-cart-sale>
+              Registrar como venta
+            </button>
+          </div>
+          <p class="mini-note">* Cambia precios, sabores y número del negocio en <code>app.js</code>.</p>
         </aside>
+      </section>
+
+      <section class="section-shell sales-section" id="ventas">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Panel interno</p>
+          <h2>Ventas de Mochi Mochi</h2>
+          <p>Registra ventas, revisa totales y descarga un archivo compatible con Excel.</p>
+        </div>
+
+        <div class="sales-layout reveal">
+          <article class="sales-card">
+            <h3>Resumen</h3>
+            <div class="sales-stats">
+              <div><span>Ventas</span><strong data-sales-count>0</strong></div>
+              <div><span>Total</span><strong data-sales-total>$0 MXN</strong></div>
+              <div><span>Productos</span><strong data-sales-items>0</strong></div>
+            </div>
+            <div class="stack-actions">
+              <button class="primary-button primary-button--full" type="button" data-export-sales>Exportar Excel</button>
+              <button class="secondary-button secondary-button--full" type="button" data-export-csv>Exportar CSV</button>
+              <button class="danger-button" type="button" data-clear-sales>Borrar historial</button>
+            </div>
+          </article>
+
+          <article class="sales-card">
+            <h3>Venta rápida</h3>
+            <p class="mini-note left">Para registrar una venta sin usar el carrito.</p>
+            <form class="quick-sale-form" data-quick-sale-form>
+              <label>
+                Producto
+                <select data-quick-product></select>
+              </label>
+              <label>
+                Cantidad
+                <input type="number" min="1" value="1" data-quick-qty />
+              </label>
+              <label>
+                Nota
+                <input type="text" data-quick-note placeholder="Opcional" />
+              </label>
+              <button class="primary-button primary-button--full" type="submit">Guardar venta rápida</button>
+            </form>
+          </article>
+        </div>
+
+        <div class="table-wrap reveal">
+          <table class="sales-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Productos</th>
+                <th>Nota</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody data-sales-table></tbody>
+          </table>
+        </div>
       </section>
     </main>
 
@@ -138,16 +210,14 @@
       <div class="section-shell footer-grid">
         <div>
           <strong>Mochi Mochi</strong>
-          <p>Postres suaves, bebidas bonitas y pedidos sin drama.</p>
+          <p>Antojitos bonitos, pedidos rápidos y ventas ordenadas.</p>
         </div>
         <div>
-          <span>Contacto</span>
-          <a href="#pedido">Ordenar ahora</a>
+          <span>Accesos rápidos</span>
           <a href="#menu">Ver menú</a>
+          <a href="#ventas">Panel de ventas</a>
         </div>
       </div>
     </footer>
-
-    <script src="./app.js"></script>
   </body>
 </html>
