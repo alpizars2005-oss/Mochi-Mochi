@@ -1,68 +1,55 @@
 # Mochi Mochi Web
 
-Versión web de **Mochi Mochi** hecha con HTML, CSS y JavaScript puro.
+Mochi Mochi is a web application built with HTML, CSS, and vanilla JavaScript for a small food business.
 
-## Origen del proyecto
+I created this project to provide a simple way to display products, receive orders through WhatsApp, and keep a basic sales record without requiring a complex system or backend.
 
-Este proyecto nace tomando como base la app anterior de **Banderillas Mont's**. La idea original era tener una aplicación para presentar o administrar productos de un negocio de comida. En esta versión lo reorganicé como una página web más moderna, visual y fácil de compartir.
+## Features
 
-Ahora el proyecto funciona como menú digital, carrito de pedidos por WhatsApp y panel sencillo para registrar ventas.
+- Dynamic menu organized by categories
+- Product search
+- Product flavors, variants, and ingredients
+- Shopping cart with quantities and estimated totals
+- Orders prepared and sent through WhatsApp
+- Sales dashboard with purchase history
+- Quick-sale registration
+- Excel and CSV export
+- Light and dark mode
+- Responsive design for mobile devices
 
-## Productos incluidos
+## Technologies Used
 
-- Banderillas coreanas
-- Sushis
-- Pay de limón
-- Mochis
-- Waffles
-- Plátanos árabes
-- Hot cakes
-- Sodas italianas
-- Molle pizzas
-- Orden de papas fritas
+- HTML
+- CSS
+- JavaScript
+- LocalStorage
+- SheetJS
+- GitHub Pages
 
-Se ignoraron los apartados de insumos desechables y cake pops.
+## How to Run the Project
 
-## Funciones
+1. Clone or download this repository.
+2. Open `app.js` and update the business information and product catalog.
+3. Open `index.html` in your browser.
 
-- Menú dinámico por categorías.
-- Búsqueda de productos.
-- Sabores y variantes por producto.
-- Ingredientes separados por producto.
-- Carrito con cantidades y total estimado.
-- Pedido listo para enviar por WhatsApp.
-- Panel de ventas con historial.
-- Registro de ventas desde carrito o venta rápida.
-- Exportación a Excel usando SheetJS.
-- Exportación alternativa a CSV.
-- Modo claro/oscuro.
-- Diseño responsive para celular.
+## Sales Storage and Export
 
-## Cómo editar rápido
+Sales are stored locally in the browser using `localStorage`. This means the data remains on the device where the application is used and is not stored in the cloud.
 
-1. Abre `app.js`.
-2. Cambia `BUSINESS.whatsappNumber` por el número real en formato internacional, sin `+`.
-3. Edita el arreglo `products` para cambiar productos, precios, sabores, variantes, ingredientes e imágenes.
-4. Abre `index.html` en el navegador.
-
-## Ventas y Excel
-
-Las ventas se guardan en `localStorage`, o sea, en el navegador donde se usa la página. No es una base de datos en la nube todavía.
-
-Para descargar las ventas:
-
-1. Ve a la sección **Ventas**.
-2. Presiona **Exportar Excel**.
-3. Se descarga un archivo `.xlsx`.
-
-Si por alguna razón no carga la librería de Excel, puedes usar **Exportar CSV**, que también se abre en Excel.
+The sales section can export the saved history as an Excel or CSV file.
 
 ## GitHub Pages
 
-Como los archivos principales están en la raíz del repo, puedes activar GitHub Pages desde:
+Because the main files are stored in the repository root, the project can be published from:
 
 `Settings > Pages > Deploy from branch > main > /root`
 
-## Nota mía
+## Project Decisions
 
-Dejé el proyecto sin frameworks para que sea fácil de entender, editar y enseñar. Si después quiero algo más pro, se puede migrar a React/Vite con backend para inventario, ventas en la nube y usuarios.
+I built this project without frameworks so it would remain easy to understand, edit, and maintain while I continue improving my JavaScript skills.
+
+A future version could migrate to React and include a backend for cloud-based inventory, accounts, and sales management.
+
+## What I Learned
+
+This project helped me practice responsive interface design, dynamic JavaScript content, browser storage, order workflows, sales tracking, and data exports for a real small business.
