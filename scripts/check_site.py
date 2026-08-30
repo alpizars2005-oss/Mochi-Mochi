@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
+APP_JS = ROOT / "app.js"
 
 REQUIRED_IDS = {"inicio", "menu", "ingredientes", "pedido", "ventas"}
 REQUIRED_DATA_HOOKS = {
@@ -18,6 +19,13 @@ REQUIRED_DATA_HOOKS = {
     "data-export-sales",
     "data-export-csv",
     "data-clear-sales",
+}
+REQUIRED_SALES_SAFETY_SNIPPETS = {
+    "normalizeStoredSale": "persisted sales schema validation",
+    "parsed.map(normalizeStoredSale).filter(Boolean)": "malformed localStorage filtering",
+    "escapeHtml(sale.note || \"-\")": "HTML escaping for sale notes",
+    "escapeHtml(saleItemsText(sale))": "HTML escaping for persisted sale items",
+    "spreadsheetSafeText(sale.note || \"\")": "spreadsheet formula neutralization",
 }
 
 
@@ -56,10 +64,16 @@ class SiteParser(HTMLParser):
 def main() -> None:
     parser = SiteParser()
     parser.feed(INDEX.read_text(encoding="utf-8"))
+    app_js = APP_JS.read_text(encoding="utf-8")
 
     missing_ids = REQUIRED_IDS - parser.ids
     missing_hooks = REQUIRED_DATA_HOOKS - parser.data_hooks
     missing_files = sorted(ref for ref in parser.local_refs if not (ROOT / ref).is_file())
+    missing_safety = [
+        label
+        for snippet, label in REQUIRED_SALES_SAFETY_SNIPPETS.items()
+        if snippet not in app_js
+    ]
 
     errors: list[str] = []
     if missing_ids:
@@ -68,6 +82,8 @@ def main() -> None:
         errors.append(f"Missing JavaScript data hooks: {sorted(missing_hooks)}")
     if missing_files:
         errors.append(f"Missing local assets: {missing_files}")
+    if missing_safety:
+        errors.append(f"Missing sales safety contracts: {missing_safety}")
 
     xlsx_scripts = [url for url in parser.external_scripts if "xlsx" in url.lower()]
     if xlsx_scripts and not all("xlsx@0.18.5" in url for url in xlsx_scripts):
@@ -78,7 +94,8 @@ def main() -> None:
 
     print(
         f"Static contract OK: {len(parser.ids)} ids, "
-        f"{len(parser.data_hooks)} data hooks, {len(parser.local_refs)} local assets."
+        f"{len(parser.data_hooks)} data hooks, {len(parser.local_refs)} local assets, "
+        f"{len(REQUIRED_SALES_SAFETY_SNIPPETS)} sales safety checks."
     )
 
 
