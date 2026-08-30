@@ -182,9 +182,65 @@ function getCartKey(productId, option) {
   return `${productId}::${option}`;
 }
 
+function asFiniteNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function normalizeStoredSale(sale) {
+  if (!sale || typeof sale !== "object" || !Array.isArray(sale.items)) return null;
+
+  const items = sale.items
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const qty = asFiniteNumber(item.qty);
+      const unitPrice = asFiniteNumber(item.unitPrice);
+      if (qty === null || qty <= 0 || unitPrice === null || unitPrice < 0) return null;
+      return {
+        productId: String(item.productId || ""),
+        name: String(item.name || "Producto"),
+        option: String(item.option || "Normal"),
+        qty,
+        unitPrice,
+        subtotal: qty * unitPrice
+      };
+    })
+    .filter(Boolean);
+
+  if (items.length === 0) return null;
+
+  const createdAt = new Date(sale.createdAt);
+  const safeCreatedAt = Number.isNaN(createdAt.getTime()) ? new Date().toISOString() : createdAt.toISOString();
+  return {
+    id: String(sale.id || `recovered-${safeCreatedAt}`),
+    createdAt: safeCreatedAt,
+    note: typeof sale.note === "string" ? sale.note : "",
+    items,
+    total: items.reduce((sum, item) => sum + item.subtotal, 0)
+  };
+}
+
+function escapeHtml(value) {
+  const entities = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  };
+  return String(value).replace(/[&<>"']/g, (character) => entities[character]);
+}
+
+function spreadsheetSafeText(value) {
+  const text = String(value ?? "");
+  return /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+}
+
 function loadSales() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEYS.sales)) || [];
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.sales));
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map(normalizeStoredSale).filter(Boolean);
   } catch (error) {
     return [];
   }
@@ -422,11 +478,11 @@ function renderSales() {
   salesTable.innerHTML = state.sales
     .map((sale) => `
       <tr>
-        <td>${new Date(sale.createdAt).toLocaleString("es-MX")}</td>
-        <td>${saleItemsText(sale)}</td>
-        <td>${sale.note || "-"}</td>
+        <td>${escapeHtml(new Date(sale.createdAt).toLocaleString("es-MX"))}</td>
+        <td>${escapeHtml(saleItemsText(sale))}</td>
+        <td>${escapeHtml(sale.note || "-")}</td>
         <td><strong>${money.format(sale.total)}</strong></td>
-        <td><button class="delete-sale" type="button" data-delete-sale="${sale.id}">Borrar</button></td>
+        <td><button class="delete-sale" type="button" data-delete-sale="${escapeHtml(sale.id)}">Borrar</button></td>
       </tr>
     `)
     .join("");
@@ -450,13 +506,13 @@ function getSalesRows() {
   return state.sales.flatMap((sale) =>
     sale.items.map((item) => ({
       Fecha: new Date(sale.createdAt).toLocaleString("es-MX"),
-      Producto: item.name,
-      Variante: item.option,
+      Producto: spreadsheetSafeText(item.name),
+      Variante: spreadsheetSafeText(item.option),
       Cantidad: item.qty,
       "Precio unitario": item.unitPrice,
       Subtotal: item.subtotal,
       "Total venta": sale.total,
-      Nota: sale.note || ""
+      Nota: spreadsheetSafeText(sale.note || "")
     }))
   );
 }
